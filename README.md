@@ -6,5 +6,8 @@ The goal of this project is to create an in-browser code editor. This editor wil
 
 ### Tools
 - React + Vite
-- Monaco React Editor: https://www.npmjs.com/package/@monaco...
-- Chakra UI: https://chakra-ui.com
+- Monaco React Editor: [https://www.npmjs.com/package/@monaco...](https://www.npmjs.com/package/@monaco-editor/react)
+- Chakra UI: [https://chakra-ui.com](https://chakra-ui.com/)
+
+### Interpreter
+[https://github.com/SSUDevs/Interpreter](https://github.com/SSUDevs/Interpreter)
