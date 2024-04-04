@@ -9,38 +9,50 @@ import {
 } from "@chakra-ui/react";
 import { LANGUAGE_VERSIONS } from "../languages";
 
+// Transforming LANGUAGE_VERSIONS object into an array of [language, version] pairs
 const languages = Object.entries(LANGUAGE_VERSIONS);
+// Constant for the active language color in the UI
 const ACTIVE_COLOR = "blue.400";
 
 const LanguageSelector = ({ language, onSelect }) => {
   return (
     <Box ml={2} mb={4}>
       <Text mb={2} fontSize="lg">
-        Language:
+        Language: {/* Label indicating the purpose of the dropdown */}
       </Text>
       <Menu isLazy>
         <MenuButton as={Button}>
-          {language === "cpp" ? "blue" : language}
+          {language === "cpp" ? "blue" : language}{" "}
+          {/* Dynamically displays the current language or "blue" for C++ */}
         </MenuButton>
         <MenuList bg="#110c1b">
-          {languages.map(([lang, version]) => (
-            <MenuItem
-              key={lang}
-              color={lang === language ? ACTIVE_COLOR : ""}
-              bg={lang === language ? "gray.900" : "transparent"}
-              _hover={{
-                color: ACTIVE_COLOR,
-                bg: "gray.900",
-              }}
-              onClick={() => onSelect(lang)} // update language state
-            >
-              {lang === "cpp" ? "blue" : lang}
-              &nbsp;
-              <Text as="span" color="gray.600" fontSize="sm">
-                ({version})
-              </Text>
-            </MenuItem>
-          ))}
+          {" "}
+          {/* Custom background color for the dropdown list */}
+          {languages.map(
+            (
+              [lang, version] // Mapping each language-version pair to a MenuItem
+            ) => (
+              <MenuItem
+                key={lang}
+                color={lang === language ? ACTIVE_COLOR : ""} // Highlights the currently selected language
+                bg={lang === language ? "gray.900" : "transparent"} // Background color changes for the active item
+                _hover={{
+                  // Styling for hover state
+                  color: ACTIVE_COLOR,
+                  bg: "gray.900",
+                }}
+                onClick={() => onSelect(lang)} // Triggers onSelect prop function with the selected language
+              >
+                {lang === "cpp" ? "blue" : lang}{" "}
+                {/* Displays "blue" for C++ language, else the language id */}
+                &nbsp; {/* Non-breaking space for styling */}
+                <Text as="span" color="gray.600" fontSize="sm">
+                  ({version}){" "}
+                  {/* Displays the version of the language in gray */}
+                </Text>
+              </MenuItem>
+            )
+          )}
         </MenuList>
       </Menu>
     </Box>
