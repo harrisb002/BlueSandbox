@@ -43,7 +43,7 @@ const Sandbox = () => {
           {/* Language selection dropdown */}
           <Editor
             options={{ minimap: { enabled: false } }} // Disable the minimap for simplicity
-            height="75vh" // Set a fixed height for the editor
+            height="90vh" // Set a fixed height for the editor
             theme="vs-dark" // Use the dark theme for the editor
             language={language} // Set the programming language for syntax highlighting
             defaultValue={CODE_SNIPPETS[language]} // Initialize with a default snippet

@@ -95,8 +95,38 @@ const Output = ({ editorRef, language }) => {
       >
         Run Code
       </Button>
+      <Button
+        variant="outline"
+        colorScheme="green"
+        mb={4}
+        ml={2}
+        isLoading={isLoading} // Shows loading indicator if code is being executed
+        // onClick={symbolTable} // Function to run code on click
+      >
+        Tokens
+      </Button>
+      <Button
+        variant="outline"
+        colorScheme="green"
+        mb={4}
+        ml={2}
+        isLoading={isLoading} // Shows loading indicator if code is being executed
+        // onClick={tokenizer} // Function to run code on click
+      >
+        CST
+      </Button>
+      <Button
+        variant="outline"
+        colorScheme="green"
+        mb={4}
+        ml={2}
+        isLoading={isLoading} // Shows loading indicator if code is being executed
+        // onClick={CST} // Function to run code on click
+      >
+        SymbolTable
+      </Button>
       <Box
-        height="75vh" // Sets a fixed height for the output box
+        height="90vh" // Sets a fixed height for the output box
         p={2} // Padding inside the box
         color={isError ? "red.400" : ""} // Text color changes based on error state
         border="1px solid" // Border styling
