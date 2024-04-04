@@ -19,7 +19,9 @@ const LanguageSelector = ({ language, onSelect }) => {
         Language:
       </Text>
       <Menu isLazy>
-        <MenuButton as={Button}>{language}</MenuButton>
+        <MenuButton as={Button}>
+          {language === "cpp" ? "wolve" : language}
+        </MenuButton>
         <MenuList bg="#110c1b">
           {languages.map(([lang, version]) => (
             <MenuItem
@@ -32,7 +34,7 @@ const LanguageSelector = ({ language, onSelect }) => {
               }}
               onClick={() => onSelect(lang)} // update language state
             >
-              {lang}
+              {lang === "cpp" ? "wolve" : lang}
               &nbsp;
               <Text as="span" color="gray.600" fontSize="sm">
                 ({version})
