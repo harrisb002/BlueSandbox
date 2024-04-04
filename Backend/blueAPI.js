@@ -7,6 +7,7 @@ const app = express();
 const port = 3001; // Port must remain available 
 
 app.use(cors());
+app.use(express.json()); // This line is crucial for your error
 
 app.post('/execute-blue-code', async (req, res) => {
   const { sourceCode } = req.body;
