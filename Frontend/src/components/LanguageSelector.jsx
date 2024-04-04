@@ -7,11 +7,12 @@ import {
   MenuList,
   Text,
 } from "@chakra-ui/react";
+import { LANGUAGE_VERSIONS } from "../languages";
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
 const ACTIVE_COLOR = "blue.400";
 
-const LanguageSelector = () => {
+const LanguageSelector = ({ language, onSelect }) => {
   return (
     <Box ml={2} mb={4}>
       <Text mb={2} fontSize="lg">
@@ -29,7 +30,7 @@ const LanguageSelector = () => {
                 color: ACTIVE_COLOR,
                 bg: "gray.900",
               }}
-              onClick={() => onSelect(lang)}
+              onClick={() => onSelect(lang)} // update language state
             >
               {lang}
               &nbsp;
@@ -43,4 +44,5 @@ const LanguageSelector = () => {
     </Box>
   );
 };
+
 export default LanguageSelector;
