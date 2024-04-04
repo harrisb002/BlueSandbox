@@ -11,22 +11,23 @@ const Output = ({ editorRef, language }) => {
 
   async function executeBlueCode(sourceCode) {
     try {
-      const response = await fetch('http://localhost:3001/execute-blue-code', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/execute-blue-code", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ sourceCode }),
       });
-  
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const error = await response.json();
+        throw new Error(error.error);
       }
-  
+
       const result = await response.json();
       return result;
     } catch (error) {
-      console.error('Failed to execute Blue code:', error);
+      console.error("Failed to execute Blue code:", error);
       throw error;
     }
   }
@@ -41,7 +42,8 @@ const Output = ({ editorRef, language }) => {
       setIsLoading(true);
 
       let result;
-      if (language === "cpp") { // AKA blue
+      if (language === "cpp") {
+        // AKA blue
         // Execute the code via the blue API
         result = await executeBlueCode(sourceCode);
       } else {
@@ -50,14 +52,23 @@ const Output = ({ editorRef, language }) => {
         result = response.run;
       }
 
-
       // Split the output string into an array of lines and update state
       setOutput(result.output.split("\n"));
-      // Set error state based on whether there's stderr output
-      result.stderr ? setIsError(true) : setIsError(false);
+      // Check if there's an error message in stderr, set error state and output accordingly
+      if (result.stderr) {
+        setIsError(true);
+        setOutput(result.stderr.split("\n"));
+      } else {
+        setIsError(false);
+        // Split the output string into an array of lines and update state
+        setOutput(result.output.split("\n"));
+      }
     } catch (error) {
       // Log any errors to the console and show a toast notification
       console.log(error);
+      setIsError(true); // Ensure text color is set to red
+      setOutput([error.message || "Unable to run code"]); // Convert error message into an array to be consistent with successful output
+
       toast({
         title: "An error occurred.",
         description: error.message || "Unable to run code",
