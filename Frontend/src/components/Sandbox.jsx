@@ -8,7 +8,7 @@ import Output from "./Output";
 const Sandbox = () => {
   const editorRef = useRef();
   const [value, setValue] = useState("");
-  const [language, setLanguage] = useState("wolve");
+  const [language, setLanguage] = useState("cpp");
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -40,7 +40,7 @@ const Sandbox = () => {
             onChange={(value) => setValue(value)}
           />
         </Box>
-        <Output/>
+        <Output editorRef={editorRef} language={language} />
       </HStack>
     </Box>
   );
