@@ -1,8 +1,10 @@
-# React + Vite
+# Browser code editor for a C-like Language Interpreter Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+The goal of this project is to create an in-browser code editor. This editor will allow one to write and execute code in the browser utilizing an interpreter for a C-like language built by my colleagues and I.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Tools
+- React + Vite
+- Monaco React Editor: https://www.npmjs.com/package/@monaco...
+- Chakra UI: https://chakra-ui.com
