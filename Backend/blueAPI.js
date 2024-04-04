@@ -1,14 +1,16 @@
-import express, { json } from 'express';
-import { promises as fs } from 'fs';
-import { exec } from 'child_process';
+const express = require('express');
+const cors = require("cors");
+const colors = require("colors");
+const fs = require('fs').promises;
+const { exec } = require('child_process');
 const app = express();
 const port = 3001; // Port must remain available 
 
-app.use(json()); // Middleware to parse JSON bodies
+app.use(cors());
 
 app.post('/execute-blue-code', async (req, res) => {
   const { sourceCode } = req.body;
-  const filePath = './tempSourceCode.blue'; // Temporary file for the source code to be executed
+  const filePath = './tempSourceCode.c'; // Temporary file for the source code to be executed
 
   try {
     // Write the source code to a temporary file
@@ -30,6 +32,5 @@ app.post('/execute-blue-code', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+app.listen(port, console.log(`Server running on port ${port}`.cyan));
+
