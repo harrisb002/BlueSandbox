@@ -9,21 +9,48 @@ const Output = ({ editorRef, language }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
+  async function executeBlueCode(sourceCode) {
+    try {
+      const response = await fetch('http://localhost:3001/execute-blue-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sourceCode }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Failed to execute Blue code:', error);
+      throw error;
+    }
+  }
+
   const runCode = async () => {
     // Get the source code from the editor using its reference
     const sourceCode = editorRef.current.getValue();
     // If there's no source code, do nothing
     if (!sourceCode) return;
-
-    /* 
-      Here  determine if current langauge is Blue and if so use the interpreter directly without API
-    */
-
     try {
       // Set loading state to true before making the API call
       setIsLoading(true);
-      // Execute the code via the API and destructure to get the 'run' object
-      const { run: result } = await executeCode(language, sourceCode);
+
+      let result;
+      if (language === "cpp") { // AKA blue
+        // Execute the code via the blue API
+        result = await executeBlueCode(sourceCode);
+      } else {
+        // Execute the code via the piston API and destructure to get the 'run' object
+        const response = await executeCode(language, sourceCode);
+        result = response.run;
+      }
+
+
       // Split the output string into an array of lines and update state
       setOutput(result.output.split("\n"));
       // Set error state based on whether there's stderr output
