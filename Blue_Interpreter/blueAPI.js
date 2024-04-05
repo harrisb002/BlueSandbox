@@ -9,25 +9,33 @@ const port = 3001; // Port must remain available
 app.use(cors());
 app.use(express.json()); // This line is crucial for your error
 
-app.post("/execute-blue-code", async (req, res) => {
+app.post("/execute-blue-code/:type", async (req, res) => {
   const { sourceCode } = req.body;
-  const filePath = "./tempSourceCode.c"; // Temporary file for the source code to be executed
+  const { type } = req.params; // Type of execution: run, tokens, cst, symbolTable
+  const filePath = "./tempSourceCode.c";
 
   try {
-    // Write the source code to a temporary file
     await fs.writeFile(filePath, sourceCode);
+    // Decide which executable to run based on the 'type' parameter
+    let command;
+    switch (type) {
+      case "tokens":
+        command = `./mainTokens ${filePath}`;
+        break;
+      case "cst":
+        command = `./mainCST ${filePath}`;
+        break;
+      case "symbolTable":
+        command = `./mainSymbolTable ${filePath}`;
+        break;
+      default:
+        command = `./main ${filePath}`;
+    }
 
-    // Execute the precompiled './main' program with the temporary file
-    exec(`./main ${filePath}`, (error, stdout, stderr) => {
+    exec(command, (error, stdout, stderr) => {
       if (error) {
-        // Extract the part of the error message after the command
-        const errorMessage =
-          error.message.split("./main ./tempSourceCode.c")[1] ||
-          " Unknown error";
-        return res.status(500).send({ error: errorMessage.trim() });
+        return res.status(500).send({ error: error.message });
       }
-
-      // Send the output back to the frontend
       res.send({ output: stdout, stderr: stderr });
     });
   } catch (error) {

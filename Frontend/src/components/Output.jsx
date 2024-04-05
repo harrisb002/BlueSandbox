@@ -9,15 +9,18 @@ const Output = ({ editorRef, language }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  async function executeBlueCode(sourceCode) {
+  async function executeBlueCode(sourceCode, type = "run") {
     try {
-      const response = await fetch("http://localhost:3001/execute-blue-code", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ sourceCode }),
-      });
+      const response = await fetch(
+        `http://localhost:3001/execute-blue-code/${type}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ sourceCode }),
+        }
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -31,6 +34,32 @@ const Output = ({ editorRef, language }) => {
       throw error;
     }
   }
+
+  const executeType = async (type) => {
+    const sourceCode = editorRef.current.getValue();
+    if (!sourceCode) return;
+    setIsLoading(true);
+    try {
+      const result = await executeBlueCode(sourceCode, type);
+      setOutput(result.output.split("\n"));
+      setIsError(!!result.stderr);
+      if (result.stderr) {
+        setOutput(result.stderr.split("\n"));
+      }
+    } catch (error) {
+      console.log(error);
+      setIsError(true);
+      setOutput([error.message || `Unable to run ${type} code`]);
+      toast({
+        title: "An error occurred.",
+        description: error.message || `Unable to run ${type} code`,
+        status: "error",
+        duration: 6000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const runCode = async () => {
     // Get the source code from the editor using its reference
@@ -100,8 +129,8 @@ const Output = ({ editorRef, language }) => {
         colorScheme="green"
         mb={4}
         ml={2}
-        isLoading={isLoading} // Shows loading indicator if code is being executed
-        // onClick={symbolTable} // Function to run code on click
+        isLoading={isLoading}
+        onClick={() => executeType("tokens")}
       >
         Tokens
       </Button>
@@ -110,8 +139,8 @@ const Output = ({ editorRef, language }) => {
         colorScheme="green"
         mb={4}
         ml={2}
-        isLoading={isLoading} // Shows loading indicator if code is being executed
-        // onClick={tokenizer} // Function to run code on click
+        isLoading={isLoading}
+        onClick={() => executeType("cst")}
       >
         CST
       </Button>
@@ -120,8 +149,8 @@ const Output = ({ editorRef, language }) => {
         colorScheme="green"
         mb={4}
         ml={2}
-        isLoading={isLoading} // Shows loading indicator if code is being executed
-        // onClick={CST} // Function to run code on click
+        isLoading={isLoading}
+        onClick={() => executeType("symbolTable")}
       >
         SymbolTable
       </Button>
