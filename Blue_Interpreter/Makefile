@@ -1,37 +1,46 @@
 CC = g++ -std=c++11
+
 CFLAGS = 
+
 INCLUDES = 
+
 LFLAGS = 
+
 LIBS = 
 
-# Common source files shared by all executables
+# Common source files needed by all mains, excluding the main.cpp files themselves
 COMMON_SRCS = ./src/CommentRemoval/fileAsArray.cpp ./src/Token/Tokenizer.cpp ./src/Token/Token.cpp ./src/CST/ConcreteSyntaxTree.cpp ./src/CST/Node.cpp ./src/CST/Parser.cpp ./src/OutputCST/OutPutGenerator.cpp ./src/SymbolTable/SymbolTablesLinkedList.cpp
 
-# Object files derived from COMMON_SRCS
-COMMON_OBJS = $(COMMON_SRCS:.cpp=.o)
+# Object files for the common source files
+COMMON_OBJS = $(COMMON_SRCS:.c=.o)
 
-# Executable names
-EXECUTABLES = main tokens cst symbolTable
+# Define the executable file names
+EXECUTABLES = main mainCST mainTokens mainSymbolTable
+
+.PHONY: all depend clean
 
 all: $(EXECUTABLES)
 
-main: $(COMMON_OBJS) ./src/main.o
+main: ./src/main.cpp $(COMMON_OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LFLAGS) $(LIBS)
 
-tokens: $(COMMON_OBJS) ./src/mainTokens.o
+mainCST: ./src/mainCST.cpp $(COMMON_OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LFLAGS) $(LIBS)
 
-cst: $(COMMON_OBJS) ./src/mainCST.o
+mainTokens: ./src/mainTokens.cpp $(COMMON_OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LFLAGS) $(LIBS)
 
-symbolTable: $(COMMON_OBJS) ./src/mainSymbolTable.o
+mainSymbolTable: ./src/mainSymbolTable.cpp $(COMMON_OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LFLAGS) $(LIBS)
 
-# This is a pattern rule for building .o files from .cpp files
-%.o: %.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+# This is a suffix replacement rule for building .o's from .cpp's
+.cpp.o:
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
 	$(RM) *.o *~ $(EXECUTABLES)
 
-.PHONY: all clean
+depend: $(COMMON_SRCS) ./src/main.cpp ./src/mainCST.cpp ./src/mainTokens.cpp ./src/mainSymbolTable.cpp
+	makedepend $(INCLUDES) $^
+
+# DO NOT DELETE THIS LINE -- make depend needs it
