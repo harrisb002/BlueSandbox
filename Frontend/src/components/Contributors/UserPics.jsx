@@ -1,5 +1,5 @@
 import React from "react";
-import "./UserPics.css"; // Make sure your styles are appropriately included
+import "./UserPics.css";
 
 const contributors = [
   {
@@ -31,8 +31,6 @@ const UserPics = () => (
       {contributors.map((contributor, index) => (
         <a
           href={contributor.url}
-          target="_blank"
-          rel="noopener noreferrer"
           key={contributor.name}
           className="user-picture-link"
         >

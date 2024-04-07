@@ -1,8 +1,10 @@
 #include "ConcreteSyntaxTree.h"
 
-NodePtr ConcreteSyntaxTree::Left() {
+NodePtr ConcreteSyntaxTree::Left()
+{
     return root->Left();
 }
-NodePtr ConcreteSyntaxTree::Right() {
+NodePtr ConcreteSyntaxTree::Right()
+{
     return root->Right();
 }

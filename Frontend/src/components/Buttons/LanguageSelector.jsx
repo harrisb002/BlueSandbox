@@ -7,7 +7,7 @@ import {
   MenuList,
   Text,
 } from "@chakra-ui/react";
-import { LANGUAGE_VERSIONS } from "../Constants/languages";
+import { LANGUAGE_VERSIONS } from "../../Constants/languages";
 
 // Transforming LANGUAGE_VERSIONS object into an array of [language, version] pairs
 const languages = Object.entries(LANGUAGE_VERSIONS);
@@ -18,16 +18,14 @@ const LanguageSelector = ({ language, onSelect }) => {
   return (
     <Box ml={2} mb={4}>
       <Text mb={2} fontSize="lg">
-        Language: {/* Label indicating the purpose of the dropdown */}
+        Language: 
       </Text>
       <Menu isLazy>
         <MenuButton as={Button}>
           {language === "cpp" ? "blue" : language}{" "}
-          {/* Dynamically displays the current language or "blue" for C++ */}
         </MenuButton>
         <MenuList bg="#110c1b">
           {" "}
-          {/* Custom background color for the dropdown list */}
           {languages.map(
             (
               [lang, version] // Mapping each language-version pair to a MenuItem
@@ -44,7 +42,6 @@ const LanguageSelector = ({ language, onSelect }) => {
                 onClick={() => onSelect(lang)} // Triggers onSelect prop function with the selected language
               >
                 {lang === "cpp" ? "blue" : lang}{" "}
-                {/* Displays "blue" for C++ language, else the language id */}
                 &nbsp; {/* Non-breaking space for styling */}
                 <Text as="span" color="gray.600" fontSize="sm">
                   ({version}){" "}

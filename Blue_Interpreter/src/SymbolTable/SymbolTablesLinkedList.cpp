@@ -1,34 +1,47 @@
 #include "SymbolTablesLinkedList.h"
 
 SymbolTablesLinkedList::SymbolTablesLinkedList(const NodePtr CST_root)
-    : curCstNode(CST_root), scopeCount(0), currentScope(0) {
+    : curCstNode(CST_root), scopeCount(0), currentScope(0)
+{
     curCstNode = CST_root;
 }
 
-SymTblPtr SymbolTablesLinkedList::parse() {
+SymTblPtr SymbolTablesLinkedList::parse()
+{
     int braceCount = 0;
     currentScope = 0;
 
     parseRootNode();
 
-    while (peekNextCstNode() != nullptr) {
-        if (isDataType(nodeValue(peekNextCstNode()))) {
+    while (peekNextCstNode() != nullptr)
+    {
+        if (isDataType(nodeValue(peekNextCstNode())))
+        {
             declarationTable();
-        } else if (nodeValue(peekNextCstNode()) == "function") {
+        }
+        else if (nodeValue(peekNextCstNode()) == "function")
+        {
             scopeCount++;
             currentScope = scopeCount;
             functionTable();
             currentScope = 0; // Reset scope to global so that variables declared outside will be global
-        } else if (nodeValue(peekNextCstNode()) == "procedure") {
+        }
+        else if (nodeValue(peekNextCstNode()) == "procedure")
+        {
             scopeCount++;
             currentScope = scopeCount;
             procedureTable();
             currentScope = 0;
-        } else {
+        }
+        else
+        {
             // skip nodes until it's a node used for a symbol table
-            if (nodeValue(peekNextCstNode()) == "{") {
+            if (nodeValue(peekNextCstNode()) == "{")
+            {
                 braceCount++;
-            } else if (nodeValue(peekNextCstNode()) == "}") {
+            }
+            else if (nodeValue(peekNextCstNode()) == "}")
+            {
                 braceCount--;
                 if (braceCount == 0)
                     currentScope = 0;
@@ -41,13 +54,19 @@ SymTblPtr SymbolTablesLinkedList::parse() {
 
 // increments to next cstNode, also returning the curCSTNode.
 // Note: only the leftChild or rightSib can have a node, not both
-NodePtr SymbolTablesLinkedList::getNextCstNode() {
+NodePtr SymbolTablesLinkedList::getNextCstNode()
+{
 
-    if (curCstNode->rightSibling != nullptr) {
+    if (curCstNode->rightSibling != nullptr)
+    {
         curCstNode = curCstNode->rightSibling;
-    } else if (curCstNode->leftChild != nullptr) {
+    }
+    else if (curCstNode->leftChild != nullptr)
+    {
         curCstNode = curCstNode->leftChild;
-    } else {
+    }
+    else
+    {
         cerr << "Unexpected end of CST." << endl;
         exit(666);
     }
@@ -56,18 +75,24 @@ NodePtr SymbolTablesLinkedList::getNextCstNode() {
 }
 
 // returns next valid node in CST
-NodePtr SymbolTablesLinkedList::peekNextCstNode() {
-    if (curCstNode->rightSibling != nullptr) {
+NodePtr SymbolTablesLinkedList::peekNextCstNode()
+{
+    if (curCstNode->rightSibling != nullptr)
+    {
         return curCstNode->rightSibling;
-    } else if (curCstNode->leftChild != nullptr) {
+    }
+    else if (curCstNode->leftChild != nullptr)
+    {
         return curCstNode->leftChild;
     }
 
     return nullptr;
 }
 
-string SymbolTablesLinkedList::nodeValue(NodePtr node) {
-    if (!node) {
+string SymbolTablesLinkedList::nodeValue(NodePtr node)
+{
+    if (!node)
+    {
         cerr << "Can't get value of a nullptr" << endl;
         exit(1111);
     }
@@ -76,24 +101,33 @@ string SymbolTablesLinkedList::nodeValue(NodePtr node) {
 }
 
 // append a table to linked list of tables
-void SymbolTablesLinkedList::addToSymTable(SymTblPtr s) {
-    if (!root) {
+void SymbolTablesLinkedList::addToSymTable(SymTblPtr s)
+{
+    if (!root)
+    {
         root = s;
-    } else {
+    }
+    else
+    {
         lastTable->nextTable = s;
     }
 
     lastTable = s;
 }
 
-void SymbolTablesLinkedList::declarationTable() {
+void SymbolTablesLinkedList::declarationTable()
+{
     bool anotherDeclaration = false;
     string dataType;
     string repeatDataType;
-    do {                          // For multi declaration on single-line
-        if (anotherDeclaration) { // Inline declarations repreat datatype
+    do
+    { // For multi declaration on single-line
+        if (anotherDeclaration)
+        { // Inline declarations repreat datatype
             dataType = repeatDataType;
-        } else {
+        }
+        else
+        {
             auto dataTypeNode = getNextCstNode();
             dataType = nodeValue(dataTypeNode);
         }
@@ -102,23 +136,28 @@ void SymbolTablesLinkedList::declarationTable() {
         string varName = nodeValue(varNameNode);
 
         // Check for redeclarations of varaibles
-        for (int i = 0; i < varaibleDeclared.size(); i++) {
-            if (varaibleDeclared.at(i).first == varName) {
-                if (varaibleDeclared.at(i).second == 0) {
+        for (int i = 0; i < varaibleDeclared.size(); i++)
+        {
+            if (varaibleDeclared.at(i).first == varName)
+            {
+                if (varaibleDeclared.at(i).second == 0)
+                {
                     std::cerr << "Error on line "
                               << varNameNode->Value().lineNum() << ": variable "
                               << nodeValue(varNameNode)
                               << " is already defined globally ";
                     exit(60);
                 }
-                if (varaibleDeclared.at(i).second == currentScope) {
+                if (varaibleDeclared.at(i).second == currentScope)
+                {
                     std::cerr << "Error on line "
                               << varNameNode->Value().lineNum() << ": variable "
                               << nodeValue(varNameNode)
                               << " is already defined locally ";
                     exit(61);
                 }
-                if (currentScope == 0) {
+                if (currentScope == 0)
+                {
                     std::cerr << "Error on line "
                               << varNameNode->Value().lineNum() << ": variable "
                               << nodeValue(varNameNode)
@@ -136,7 +175,8 @@ void SymbolTablesLinkedList::declarationTable() {
         int arraySize = 0;
 
         // Check if the variable is an array
-        if (nodeValue(peekNextCstNode()) == "[") {
+        if (nodeValue(peekNextCstNode()) == "[")
+        {
             getNextCstNode();                 // Skip '['
             auto sizeNode = getNextCstNode(); // Get the array size
             arraySize = std::stoi(nodeValue(sizeNode));
@@ -154,7 +194,8 @@ void SymbolTablesLinkedList::declarationTable() {
         varEntry->_scope = currentScope;
 
         addToSymTable(varEntry);
-        if (nodeValue(peekNextCstNode()) == ",") {
+        if (nodeValue(peekNextCstNode()) == ",")
+        {
             getNextCstNode(); // Skip comma and move to next declaration
             // Save dataType to repeat
             repeatDataType = dataType;
@@ -163,7 +204,8 @@ void SymbolTablesLinkedList::declarationTable() {
     } while (anotherDeclaration);
 }
 
-void SymbolTablesLinkedList::functionTable() {
+void SymbolTablesLinkedList::functionTable()
+{
     getNextCstNode();
 
     // Now at the return type of the function
@@ -174,8 +216,10 @@ void SymbolTablesLinkedList::functionTable() {
     auto functionNameNode = getNextCstNode();
     string functionName = nodeValue(functionNameNode);
 
-    for (int i = 0; i < funcProcNames.size(); i++) {
-        if (funcProcNames.at(i) == functionName) {
+    for (int i = 0; i < funcProcNames.size(); i++)
+    {
+        if (funcProcNames.at(i) == functionName)
+        {
             std::cerr << "Error: " << functionName
                       << " is already defined globally "
                       << nodeValue(peekNextCstNode()) << std::endl;
@@ -198,29 +242,37 @@ void SymbolTablesLinkedList::functionTable() {
     // Assume the '(' starts the parameter list
     getNextCstNode(); // Skip '(' to start processing parameters
     parseParameters(functionName);
-    
+
     getNextCstNode(); // Skip past ')' marking the end of the parameter list.
     // Check the '{' that starts the procedure body.
-    if (nodeValue(peekNextCstNode()) == "{") {
+    if (nodeValue(peekNextCstNode()) == "{")
+    {
         getNextCstNode(); // Move past '{' to start processing the body
-    } else {
+    }
+    else
+    {
         std::cerr << "Expected '{' at the start of the procedure body. Found: "
                   << nodeValue(peekNextCstNode()) << std::endl;
         return;
     }
     while (nodeValue(peekNextCstNode()) !=
-           "}") { // Check fot the '}' that marks the end of the procedure body.
+           "}")
+    { // Check fot the '}' that marks the end of the procedure body.
         auto currentNodeValue = nodeValue(peekNextCstNode());
-        if (isDataType(currentNodeValue)) { // Check if the next node indicates
-                                            // a data type, i.e. a declaration.
-            declarationTable();             // Process a declaration.
-        } else {
+        if (isDataType(currentNodeValue))
+        {                       // Check if the next node indicates
+                                // a data type, i.e. a declaration.
+            declarationTable(); // Process a declaration.
+        }
+        else
+        {
             getNextCstNode(); // Skip nodes not relevant for the symbol table.
         }
     }
 }
 
-void SymbolTablesLinkedList::procedureTable() {
+void SymbolTablesLinkedList::procedureTable()
+{
     // Move past "procedure" keyword
     getNextCstNode();
 
@@ -241,9 +293,12 @@ void SymbolTablesLinkedList::procedureTable() {
     addToSymTable(procedureEntry);
 
     // Check the '(' that starts the procedure params.
-    if (nodeValue(peekNextCstNode()) == "(") {
+    if (nodeValue(peekNextCstNode()) == "(")
+    {
         getNextCstNode(); // Move past '(' to start processing the params
-    } else {
+    }
+    else
+    {
         std::cerr << "Expected '(' at the start of the procedure body. Found: "
                   << nodeValue(peekNextCstNode()) << std::endl;
         return;
@@ -253,57 +308,72 @@ void SymbolTablesLinkedList::procedureTable() {
 
     getNextCstNode(); // Skip past ')' marking the end of the parameter list.
     // Check the '{' that starts the procedure body.
-    if (nodeValue(peekNextCstNode()) == "{") {
+    if (nodeValue(peekNextCstNode()) == "{")
+    {
         getNextCstNode(); // Move past '{' to start processing the body
-    } else {
+    }
+    else
+    {
         std::cerr << "Expected '{' at the start of the procedure body. Found: "
                   << nodeValue(peekNextCstNode()) << std::endl;
         return;
     }
     while (nodeValue(peekNextCstNode()) !=
-           "}") { // Check fot the '}' that marks the end of the procedure body.
+           "}")
+    { // Check fot the '}' that marks the end of the procedure body.
         auto currentNodeValue = nodeValue(peekNextCstNode());
-        if (isDataType(currentNodeValue)) { // Check if the next node indicates
-                                            // a data type, i.e. a declaration.
-            declarationTable();             // Process a declaration.
-        } else {
+        if (isDataType(currentNodeValue))
+        {                       // Check if the next node indicates
+                                // a data type, i.e. a declaration.
+            declarationTable(); // Process a declaration.
+        }
+        else
+        {
             getNextCstNode(); // Skip nodes not relevant for the symbol table.
         }
     }
 }
 
 void SymbolTablesLinkedList::parseParameters(
-    const string &procedureOrFunctionName) {
+    const string &procedureOrFunctionName)
+{
     auto nextNode = peekNextCstNode();
-    if (nodeValue(nextNode) == "void") {
+    if (nodeValue(nextNode) == "void")
+    {
         getNextCstNode(); // Skip 'void'
         return;
     }
 
     // Begin parsing parameters until the end of the parameter list.
-    while (nodeValue(nextNode) != ")") {
+    while (nodeValue(nextNode) != ")")
+    {
         auto paramTypeNode =
-            getNextCstNode(); // Get the data type of the parameter.
+            getNextCstNode();                  // Get the data type of the parameter.
         auto paramNameNode = getNextCstNode(); // Get the name of the parameter.
         string varName = nodeValue(paramNameNode);
         // Check for redeclarations of varaibles
-        for (int i = 0; i < varaibleDeclared.size(); i++) {
-            if (varaibleDeclared.at(i).first == varName) {
-                if (varaibleDeclared.at(i).second == 0) {
+        for (int i = 0; i < varaibleDeclared.size(); i++)
+        {
+            if (varaibleDeclared.at(i).first == varName)
+            {
+                if (varaibleDeclared.at(i).second == 0)
+                {
                     std::cerr << "Error on line "
                               << paramNameNode->Value().lineNum()
                               << ": variable " << nodeValue(paramNameNode)
                               << " is already defined globally ";
                     exit(60);
                 }
-                if (varaibleDeclared.at(i).second == currentScope) {
+                if (varaibleDeclared.at(i).second == currentScope)
+                {
                     std::cerr << "Error on line "
                               << paramNameNode->Value().lineNum()
                               << ": variable " << nodeValue(paramNameNode)
                               << " is already defined locally ";
                     exit(61);
                 }
-                if (currentScope == 0) {
+                if (currentScope == 0)
+                {
                     std::cerr << "Error on line "
                               << paramNameNode->Value().lineNum()
                               << ": variable " << nodeValue(paramNameNode)
@@ -321,7 +391,8 @@ void SymbolTablesLinkedList::parseParameters(
         int arraySize = 0;
 
         // Check if the parameter is an array.
-        if (nodeValue(peekNextCstNode()) == "[") {
+        if (nodeValue(peekNextCstNode()) == "[")
+        {
             getNextCstNode(); // Skip '['
             auto arraySizeNode =
                 getNextCstNode(); // Assuming the size is specified next.
@@ -346,23 +417,30 @@ void SymbolTablesLinkedList::parseParameters(
 
         nextNode = peekNextCstNode(); // Peek at the next node to see if more
                                       // parameters exist.
-        if (nodeValue(nextNode) == ",") {
+        if (nodeValue(nextNode) == ",")
+        {
             getNextCstNode(); // Skip the comma to move to the next parameter.
         }
     }
 }
 
-void SymbolTablesLinkedList::parseRootNode() {
+void SymbolTablesLinkedList::parseRootNode()
+{
     auto currNode = curCstNode;
     bool anotherDeclaration = false;
-    if (isDataType(nodeValue(currNode))) {
+    if (isDataType(nodeValue(currNode)))
+    {
         bool anotherDeclaration = false;
         string dataType;
         string repeatDataType;
-        do {                          // For multi declaration on single-line
-            if (anotherDeclaration) { // Inline declarations repreat datatype
+        do
+        { // For multi declaration on single-line
+            if (anotherDeclaration)
+            { // Inline declarations repreat datatype
                 dataType = repeatDataType;
-            } else {
+            }
+            else
+            {
                 dataType = nodeValue(currNode);
             }
             anotherDeclaration = false;
@@ -370,23 +448,28 @@ void SymbolTablesLinkedList::parseRootNode() {
             string varName = nodeValue(varNameNode);
 
             // Check for redeclarations of varaibles
-            for (int i = 0; i < varaibleDeclared.size(); i++) {
-                if (varaibleDeclared.at(i).first == varName) {
-                    if (varaibleDeclared.at(i).second == 0) {
+            for (int i = 0; i < varaibleDeclared.size(); i++)
+            {
+                if (varaibleDeclared.at(i).first == varName)
+                {
+                    if (varaibleDeclared.at(i).second == 0)
+                    {
                         std::cerr << "Error on line "
                                   << varNameNode->Value().lineNum()
                                   << ": variable " << nodeValue(varNameNode)
                                   << " is already defined globally ";
                         exit(20);
                     }
-                    if (varaibleDeclared.at(i).second == currentScope) {
+                    if (varaibleDeclared.at(i).second == currentScope)
+                    {
                         std::cerr << "Error on line "
                                   << varNameNode->Value().lineNum()
                                   << ": variable " << nodeValue(varNameNode)
                                   << " is already defined locally ";
                         exit(21);
                     }
-                    if (currentScope == 0) {
+                    if (currentScope == 0)
+                    {
                         std::cerr << "Error on line "
                                   << varNameNode->Value().lineNum()
                                   << ": variable " << nodeValue(varNameNode)
@@ -404,7 +487,8 @@ void SymbolTablesLinkedList::parseRootNode() {
             int arraySize = 0;
 
             // Check if the variable is an array
-            if (nodeValue(peekNextCstNode()) == "[") {
+            if (nodeValue(peekNextCstNode()) == "[")
+            {
                 getNextCstNode();                 // Skip '['
                 auto sizeNode = getNextCstNode(); // Get the array size
                 arraySize = std::stoi(nodeValue(sizeNode));
@@ -422,14 +506,17 @@ void SymbolTablesLinkedList::parseRootNode() {
             varEntry->_scope = currentScope;
 
             addToSymTable(varEntry);
-            if (nodeValue(peekNextCstNode()) == ",") {
+            if (nodeValue(peekNextCstNode()) == ",")
+            {
                 getNextCstNode(); // Skip comma and move to next declaration
                 // Save dataType to repeat
                 repeatDataType = dataType;
                 anotherDeclaration = true;
             }
         } while (anotherDeclaration);
-    } else if (nodeValue(curCstNode) == "function") {
+    }
+    else if (nodeValue(curCstNode) == "function")
+    {
         scopeCount++;
         currentScope = scopeCount;
 
@@ -453,7 +540,9 @@ void SymbolTablesLinkedList::parseRootNode() {
         addToSymTable(functionEntry);
         getNextCstNode();
         parseParameters(functionName);
-    } else if (nodeValue(curCstNode) == "procedure") {
+    }
+    else if (nodeValue(curCstNode) == "procedure")
+    {
         scopeCount++;
         currentScope = scopeCount;
 
@@ -477,10 +566,12 @@ void SymbolTablesLinkedList::parseRootNode() {
     }
 }
 
-void SymbolTablesLinkedList::printTables() {
+void SymbolTablesLinkedList::printTables()
+{
     SymTblPtr current = root;
 
-    while (current != nullptr) {
+    while (current != nullptr)
+    {
         cout << "IDENTIFIER_NAME: " << current->Name() << endl;
         cout << "IDENTIFIER_TYPE: " << current->idType() << endl;
         cout << "DATATYPE: " << current->dataType() << endl;

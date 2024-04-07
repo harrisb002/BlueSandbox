@@ -1,7 +1,10 @@
 import "./BNF.css";
 export default function BNF() {
   return (
-    <div className="WordSection1" style={{ padding: "50px", backgroundColor: "white", color: "black" }}>
+    <div
+      className="WordSection1"
+      style={{ padding: "50px", backgroundColor: "white", color: "black" }}
+    >
       <p className="MsoNormal">
         <span className="Heading3Char">
           <span style={{ fontSize: "14.0pt" }}>&lt;CHARACTER&gt;</span>

@@ -1,10 +1,11 @@
-#ifndef ASSIGNMENT1_460_CONCRETESYNTAXTREE_H
-#define ASSIGNMENT1_460_CONCRETESYNTAXTREE_H
-#include"../Token/Token.h"
+#ifndef CONCRETESYNTAXTREE_H
+#define CONCRETESYNTAXTREE_H
+#include "../Token/Token.h"
 #include "Node.h"
 #include <vector>
 using namespace std;
-class ConcreteSyntaxTree {
+class ConcreteSyntaxTree
+{
 public:
     ConcreteSyntaxTree();
     ~ConcreteSyntaxTree();
@@ -16,8 +17,6 @@ public:
 
 private:
     Node *root;
-
 };
 
-
-#endif //ASSIGNMENT1_460_CONCRETESYNTAXTREE_H
+#endif // CONCRETESYNTAXTREE_H

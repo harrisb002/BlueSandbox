@@ -16,10 +16,9 @@ export const executeCode = async (language, sourceCode) => {
     // An array of objects, each representing a file. For simplicity, only one file with the source code is sent.
     files: [
       {
-        content: sourceCode, // The source code to execute
+        content: sourceCode, // The source code to execute (Whats in the sandbox)
       },
     ],
   });
-  // Return the data received from the API call
   return response.data;
 };

@@ -1,4 +1,3 @@
-// components/Navbar.js
 import React from "react";
 import { Tabs, TabList, Tab, Divider } from "@chakra-ui/react";
 import { Link } from "react-router-dom";

@@ -2,10 +2,10 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import Navbar from "./components/Navbar/Navbar";
-import Sandbox from "./components/Sandbox";
+import Sandbox from "./components/EditorPanels/Sandbox";
 import About from "./components/About/About";
 import BNF from "./components/BNF/BNF";
-import GithubLink from "./components/GithubLink";
+import GithubLink from "./components/Contributors/GithubLink";
 
 function App() {
   return (

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Box, Text, useToast } from "@chakra-ui/react";
-import { executeCode } from "../api";
-import CodeExecutionButtons from "./CodeExecutionButtons";
+import { executeCode } from "../../api";
+import CodeExecutionButtons from "../Buttons/CodeExecutionButtons";
 
 const Output = ({ editorRef, language }) => {
   // useToast is a Chakra UI hook for showing toast notifications
@@ -73,8 +73,7 @@ const Output = ({ editorRef, language }) => {
 
       let result;
       if (language === "cpp") {
-        // AKA blue
-        // Execute the code via the blue API
+        // AKA blue and Execute the code via the blue API
         result = await executeBlueCode(sourceCode);
       } else {
         // Execute the code via the piston API and destructure to get the 'run' object
@@ -120,7 +119,7 @@ const Output = ({ editorRef, language }) => {
         isLoading={isLoading}
         onRunCode={runCode}
         onExecuteType={executeType}
-        language={language} 
+        language={language}
       />
       <Box
         height="90vh"
@@ -138,4 +137,4 @@ const Output = ({ editorRef, language }) => {
   );
 };
 
-export default Output; // Make the Output component available for import
+export default Output;
