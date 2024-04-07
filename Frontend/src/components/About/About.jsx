@@ -15,7 +15,7 @@ export default function About() {
         capability to parse and execute C-like code efficiently.
       </p>
       <p>The development stages are:</p>
-      <ol>
+      <ul>
         <li>
           <strong>Ignoring Comments</strong>
         </li>
@@ -31,7 +31,7 @@ export default function About() {
         <li>
           <strong>Abstract Syntax Tree Construction</strong>
         </li>
-      </ol>
+      </ul>
       <p>
         Each stage is designed to address a specific aspect of language
         interpretation, from preprocessing the source code to executing it.

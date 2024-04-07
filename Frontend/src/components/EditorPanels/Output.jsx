@@ -123,10 +123,8 @@ const Output = ({ editorRef, language }) => {
       />
       <Box
         height="90vh"
-        p={2}
         color={isError ? "red.400" : "white"}
         border="1px solid"
-        borderRadius={4}
         borderColor={isError ? "red.500" : "#333"}
         overflowY="auto"
       >
