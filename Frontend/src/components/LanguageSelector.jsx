@@ -7,7 +7,7 @@ import {
   MenuList,
   Text,
 } from "@chakra-ui/react";
-import { LANGUAGE_VERSIONS } from "../languages";
+import { LANGUAGE_VERSIONS } from "../Constants/languages";
 
 // Transforming LANGUAGE_VERSIONS object into an array of [language, version] pairs
 const languages = Object.entries(LANGUAGE_VERSIONS);

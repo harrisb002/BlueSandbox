@@ -7,7 +7,7 @@ import Editor from "@monaco-editor/react";
 // Import a custom component for selecting programming languages
 import LanguageSelector from "./LanguageSelector";
 // Import predefined code snippets for different languages
-import { CODE_SNIPPETS } from "../languages";
+import { CODE_SNIPPETS } from "../Constants/languages";
 // Import a custom component to display the output of executed code
 import Output from "./Output";
 

@@ -1,6 +1,6 @@
 // Import the axios library for making HTTP requests
 import axios from "axios";
-import { LANGUAGE_VERSIONS } from "./languages";
+import { LANGUAGE_VERSIONS } from "./Constants/languages";
 
 // Create an axios instance configured with the base URL of the Piston API
 const API = axios.create({
