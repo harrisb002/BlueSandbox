@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Text, useToast } from "@chakra-ui/react";
+import { Box, Text, useToast } from "@chakra-ui/react";
 import { executeCode } from "../api";
 import CodeExecutionButtons from "./CodeExecutionButtons";
 
@@ -120,7 +120,7 @@ const Output = ({ editorRef, language }) => {
         isLoading={isLoading}
         onRunCode={runCode}
         onExecuteType={executeType}
-        language={language} // Pass the language prop to conditionally render buttons
+        language={language} 
       />
       <Box
         height="90vh"

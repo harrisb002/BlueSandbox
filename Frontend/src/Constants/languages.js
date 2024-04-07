@@ -8,9 +8,9 @@ export const LANGUAGE_VERSIONS = {
 };
 
 export const CODE_SNIPPETS = {
-  cpp: `\nfunction int sum_of_first_n_squares (int n)\n{\n\tint sum;\n\n\tsum = 0;\n\tif (n >= 1)\n\t{\n\t\tsum = n * (n + 1) * (2 * n + 1) / 6;\n\t}\n\treturn sum;\n}\n\nprocedure main (void)\n{\n\tint n;\n\tint sum;\n\tn = 100;\n\n\tsum = sum_of_first_n_squares (n);\n\tprintf ("sum of the squares of the first %d numbers = %d", n, sum);\n}`,
+  cpp: `\nfunction int sum_of_first_n_squares (int n)\n{\n\tint sum;\n\n\tsum = 0;\n\tif (n >= 1)\n\t{\n\t\tsum = n * (n + 1) * (2 * n + 1) / 6;\n\t}\n\treturn sum;\n}\n`,
   javascript: `\nfunction greet(name) {\n\tconsole.log("Hello, " + name + "!");\n}\n\ngreet("Seawolf in JS!");\n`,
-  typescript: `\ntype Params = {\n\tname: string;\n}\n\nfunction greet(data: Params) {\n\tconsole.log("Hello, " + data.name + "!");\n}\n\ngreet({ name: "Hello Seawolf in C#!" });\n`,
+  typescript: `\ntype Params = {\n\tname: string;\n}\n\nfunction greet(data: Params) {\n\tconsole.log("Hello, " + data.name + "!");\n}\n\ngreet({ name: "Hello Seawolf in Typescript!" });\n`,
   python: `\ndef greet(name):\n\tprint("Hello, " + name + "!")\n\ngreet("Hello Seawolf in Python!")\n`,
   java: `\npublic class HelloWorld {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello Seawolf in Java!");\n\t}\n}\n`,
   csharp:
