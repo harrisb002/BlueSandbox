@@ -1,8 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import styles from "./About.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckSquare } from "@fortawesome/free-solid-svg-icons";
+import UserPics from "../Contributors/UserPics";
 
 const markdown = `
 # C-like Language Interpreter Project
@@ -59,31 +58,11 @@ Creates an Abstract Syntax Tree (AST) based on the Concrete Syntax Tree (CST). A
 
 `;
 
-const contributors = [
-  { name: "harrisb002", url: "https://github.com/harrisb002" },
-  { name: "Oasiss999", url: "https://github.com/Oasiss999" },
-  { name: "EvanW2k", url: "https://github.com/EvanW2k" },
-  { name: "Zeroxa", url: "https://github.com/Zeroxa" },
-];
-
 export default function About() {
   return (
     <div className={styles.container}>
+      <UserPics /> 
       <ReactMarkdown className={styles.markdown}>{markdown}</ReactMarkdown>
-      <div className={styles.contributors}>
-        <h2>Contributors</h2>
-        {contributors.map((contributor) => (
-          <a
-            key={contributor.name}
-            href={contributor.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.contributorLink}
-          >
-            {contributor.name}
-          </a>
-        ))}
-      </div>
     </div>
   );
 }

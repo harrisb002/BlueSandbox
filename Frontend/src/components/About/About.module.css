@@ -1,4 +1,3 @@
-/* About.module.css */
 .container {
   background: white;
   padding: 20px;
@@ -8,44 +7,20 @@
 
 .markdown {
   color: #333;
-  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
   line-height: 1.6;
 }
 
 h1 {
   color: #2a69ac;
-  margin-bottom: 24px; /* Adds more space below h1 headings */
+  margin-bottom: 24px;
 }
 
 h2 {
   color: #2b6cb0;
-  margin-bottom: 16px; /* Adds more space below h2 headings */
+  margin-bottom: 16px;
 }
 
 li {
-  margin-bottom: 8px; /* Adds more space between list items */
+  margin-bottom: 8px;
 }
-
-/* Style for checkmarks and associated text */
-.checkmark {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px; /* Space between checkmark items */
-}
-
-.checkmark svg {
-  margin-right: 8px; /* Space between the checkmark icon and the text */
-}
-
-.contributors {
-  margin-top: 24px; /* Adds space before the contributors section */
-}
-
-.contributor-link {
-  color: #3182ce; /* Chakra's blue.500 for link color */
-  text-decoration: underline; /* Underlines the link */
-  margin-right: 8px; /* Space between links */
-  cursor: pointer;
-}
-
-/* Additional styles for other elements can be added here */

@@ -1,6 +1,6 @@
 // components/Navbar.js
 import React from "react";
-import { Tabs, TabList, Tab, Divider, Box } from "@chakra-ui/react";
+import { Tabs, TabList, Tab, Divider } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
