@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, Button, Text, useToast } from "@chakra-ui/react";
 import { executeCode } from "../api";
+import CodeExecutionButtons from "./CodeExecutionButtons";
 
 const Output = ({ editorRef, language }) => {
   // useToast is a Chakra UI hook for showing toast notifications
@@ -115,57 +116,23 @@ const Output = ({ editorRef, language }) => {
       <Text mb={2} fontSize="lg">
         Output
       </Text>
-      <Button
-        variant="outline"
-        colorScheme="green"
-        mb={4}
-        isLoading={isLoading} // Shows loading indicator if code is being executed
-        onClick={runCode} // Function to run code on click
-      >
-        Run Code
-      </Button>
-      <Button
-        variant="outline"
-        colorScheme="green"
-        mb={4}
-        ml={2}
+      <CodeExecutionButtons
         isLoading={isLoading}
-        onClick={() => executeType("tokens")}
-      >
-        Tokens
-      </Button>
-      <Button
-        variant="outline"
-        colorScheme="green"
-        mb={4}
-        ml={2}
-        isLoading={isLoading}
-        onClick={() => executeType("cst")}
-      >
-        CST
-      </Button>
-      <Button
-        variant="outline"
-        colorScheme="green"
-        mb={4}
-        ml={2}
-        isLoading={isLoading}
-        onClick={() => executeType("symbolTable")}
-      >
-        SymbolTable
-      </Button>
+        onRunCode={runCode}
+        onExecuteType={executeType}
+        language={language} // Pass the language prop to conditionally render buttons
+      />
       <Box
-        height="90vh" // Sets a fixed height for the output box
-        p={2} // Padding inside the box
-        color={isError ? "red.400" : ""} // Text color changes based on error state
-        border="1px solid" // Border styling
-        borderRadius={4} // Rounded corners for the box
-        borderColor={isError ? "red.500" : "#333"} // Border color changes based on error state
+        height="90vh"
+        p={2}
+        color={isError ? "red.400" : ""}
+        border="1px solid"
+        borderRadius={4}
+        borderColor={isError ? "red.500" : "#333"}
       >
         {output
-          ? output.map((line, i) => <Text key={i}>{line}</Text>) // Map each line of output to a Text component
-          : 'Click "Run Code" to see the output here'}{" "}
-        {/*Default text before any code is run*/}
+          ? output.map((line, i) => <Text key={i}>{line}</Text>)
+          : 'Click "Run Code" to see the output here'}
       </Box>
     </Box>
   );

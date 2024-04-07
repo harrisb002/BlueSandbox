@@ -21,10 +21,10 @@ const LanguageSelector = ({ language, onSelect }) => {
         Language: {/* Label indicating the purpose of the dropdown */}
       </Text>
       <Menu isLazy>
-        <MenuButton as={Button} >
+        <MenuButton as={Button}>
           {language === "cpp" ? "blue" : language}{" "}
           {/* Dynamically displays the current language or "blue" for C++ */}
-        </MenuButton >
+        </MenuButton>
         <MenuList bg="#110c1b">
           {" "}
           {/* Custom background color for the dropdown list */}
