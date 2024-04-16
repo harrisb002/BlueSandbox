@@ -47,7 +47,7 @@ Creates symbol tables for all the defined variables (including their type and sc
 - `SymbolTable.h` and `SymbolTable.cpp`: Define and implement the SymbolTable class, which represents individual entries in the symbol table. Each entry can denote a variable, function, procedure, or a parameter list, with attributes such as name, data type, identifier type, scope level, and array-related properties. The symbol table entries are used for checking variable declarations, resolving identifier references, and performing type checking during the interpretation process.
 - `SymbolTablesLinkedList.h` and `SymbolTablesLinkedList.cpp`: Responsible for managing a linked list of SymbolTable entries, facilitating the construction and manipulation of the entire symbol table. This structure supports the nesting of scopes and the hierarchical nature defined in the BNF.
 
-### 🚧 Abstract Syntax Tree (In Progress)
+### ✅ Abstract Syntax Tree 
 Creates an Abstract Syntax Tree (AST) based on the Concrete Syntax Tree (CST). An Abstract Syntax Tree is not a clone of a Concrete Syntax Tree. Utilizes an LCRS binary tree (Left-Child, Right-Sibling) to store the AST. Allows for the isplay of the resulting AST in breadth-first order. 
 
 *Not yet implemented.*

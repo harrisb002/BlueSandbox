@@ -5,82 +5,67 @@
 Tokenizer::Tokenizer(const std::vector<char> &file)
     : _file(file), _size(file.size()) {}
 
-bool Tokenizer::isOperator(Token t)
-{
+bool Tokenizer::isOperator(Token t) {
 
     std::string value = t.value();
 
     if (value == "+" || value == "-" || value == "*" || value == "/" ||
-        value == "%" || value == "^" || value == "=")
+        value == "%" || value == "^" || value == "=" || value =="<" ||
+        value =="<=" || value ==">" || value ==">=" || value =="!" ||
+        value =="&&" || value =="||" || value =="==" || value =="!=")
         return true;
     return false;
 }
 
-bool Tokenizer::isOperator(char value)
-{
+bool Tokenizer::isOperator(char value) {
 
     if (value == '+' || value == '-' || value == '*' || value == '/' ||
-        value == '%' || value == '^' || value == '=')
+        value == '%' || value == '^' || value == '=' || value =='<' ||
+        value =='>'  || value =='!' || value =='&' || value =='|')
         return true;
     return false;
 }
 
-void Tokenizer::tokenizeVector()
-{
+void Tokenizer::tokenizeVector() {
     _currentPos = 0;
     _currentState = START;
-    while (_currentPos < _size)
-    {
+    while (_currentPos < _size) {
         Token token = getToken(); // Gonna get the next token
         if (token.type() !=
-            Token::Type::Unknown)
-        { // Skipping unknown tokens for now
+            Token::Type::Unknown) { // Skipping unknown tokens for now
             _tokens.push_back(token);
         }
     }
 }
 
-Token Tokenizer::getToken()
-{
+Token Tokenizer::getToken() {
     std::string tokenValue;
     Token::Type tokenType = Token::Type::Unknown;
     size_t tokenLineNum = _lineNum;
     bool tokenFound = false;
 
-    while (_currentPos < _size && !tokenFound)
-    {
+    while (_currentPos < _size && !tokenFound) {
 
         char currentChar = _file[_currentPos];
-        switch (_currentState)
-        {
+        switch (_currentState) {
         case START:
-            if (currentChar == '\n')
-            {
+            if (currentChar == '\n') {
                 tokenLineNum++;
-            }
-            else if (std::isspace(currentChar))
-            {
+            } else if (std::isspace(currentChar)) {
                 // Ignore whitespace
-            }
-            else if (std::isalpha(currentChar))
-            {
+            } else if (std::isalpha(currentChar)) {
                 tokenType = Token::Type::Identifier;
                 _currentState = IDENTIFIER;
                 tokenValue += currentChar;
-            }
-            else if (std::isdigit(currentChar))
-            {
+            } else if (std::isdigit(currentChar)) {
                 tokenType = Token::Type::Integer; // I think needs to be updated
                 // cause a sign could come
                 // before (so for ints)
                 _currentState = INTEGER;
                 tokenValue += currentChar;
-            }
-            else
-            {
+            } else {
                 // Handling for single char tokens (ops, punctuation, ect...)
-                switch (currentChar)
-                {
+                switch (currentChar) {
                 case '(':
                     tokenType = Token::Type::LParen;
                     tokenValue = currentChar;
@@ -151,15 +136,12 @@ Token Tokenizer::getToken()
                     break;
                 case '<':
                     if (_currentPos + 1 < _size &&
-                        _file[_currentPos + 1] == '=')
-                    {
+                        _file[_currentPos + 1] == '=') {
                         tokenType = Token::Type::LtEqual;
                         tokenValue = "<=";
                         tokenFound = true;
                         ++_currentPos;
-                    }
-                    else
-                    {
+                    } else {
                         tokenType = Token::Type::Lt;
                         tokenValue = "<";
                         tokenFound = true;
@@ -167,15 +149,12 @@ Token Tokenizer::getToken()
                     break;
                 case '>':
                     if (_currentPos + 1 < _size &&
-                        _file[_currentPos + 1] == '=')
-                    {
+                        _file[_currentPos + 1] == '=') {
                         tokenType = Token::Type::GtEqual;
                         tokenValue = ">=";
                         tokenFound = true;
                         ++_currentPos;
-                    }
-                    else
-                    {
+                    } else {
                         tokenType = Token::Type::Gt;
                         tokenValue = ">";
                         tokenFound = true;
@@ -183,8 +162,7 @@ Token Tokenizer::getToken()
                     break;
                 case '&':
                     if (_currentPos + 1 < _size &&
-                        _file[_currentPos + 1] == '&')
-                    {
+                        _file[_currentPos + 1] == '&') {
                         tokenType = Token::Type::BooleanAnd;
                         tokenValue = "&&";
                         tokenFound = true;
@@ -194,8 +172,7 @@ Token Tokenizer::getToken()
 
                 case '|':
                     if (_currentPos + 1 < _size &&
-                        _file[_currentPos + 1] == '|')
-                    {
+                        _file[_currentPos + 1] == '|') {
                         tokenType = Token::Type::BooleanOr;
                         tokenValue = "||";
                         tokenFound = true;
@@ -204,15 +181,12 @@ Token Tokenizer::getToken()
                     break;
                 case '!':
                     if (_currentPos + 1 < _size &&
-                        _file[_currentPos + 1] == '=')
-                    {
+                        _file[_currentPos + 1] == '=') {
                         tokenType = Token::Type::BooleanNotEqual;
                         tokenValue = "!=";
                         tokenFound = true;
                         ++_currentPos;
-                    }
-                    else
-                    {
+                    } else {
                         tokenType = Token::Type::BooleanNot;
                         tokenValue = "!";
                         tokenFound = true;
@@ -220,15 +194,12 @@ Token Tokenizer::getToken()
                     break;
                 case '=':
                     if (_currentPos + 1 < _size &&
-                        _file[_currentPos + 1] == '=')
-                    {
+                        _file[_currentPos + 1] == '=') {
                         tokenType = Token::Type::BooleanEqual;
                         tokenValue = "==";
                         tokenFound = true;
                         ++_currentPos;
-                    }
-                    else
-                    {
+                    } else {
                         tokenType = Token::Type::AssignmentOperator;
                         tokenValue = "=";
                         tokenFound = true;
@@ -238,16 +209,14 @@ Token Tokenizer::getToken()
                 case '-':
                     // check if last token was an op
                     if (isOperator(_tokens.back()) ||
-                        _tokens.back().value() == "(" || _tokens.back().value() == "[")
-                    {
+                        _tokens.back().value() == "("
+                        || _tokens.back().value() == "[") {
                         // Treat as part of an integer if appropriate
                         tokenType = Token::Type::Integer;
                         tokenValue += currentChar;
                         _currentState = INTEGER; // Continue to INTEGER state to
                         // allow for digits to follow
-                    }
-                    else
-                    {
+                    } else {
                         // Use ternary op to choose sign
                         tokenType = (currentChar == '+') ? Token::Type::Plus
                                                          : Token::Type::Minus;
@@ -266,25 +235,18 @@ Token Tokenizer::getToken()
             }
             break;
         case IDENTIFIER:
-            if (std::isalnum(currentChar) || currentChar == '_')
-            {
+            if (std::isalnum(currentChar) || currentChar == '_') {
                 tokenValue += currentChar;
-            }
-            else
-            {
+            } else {
                 /*if (tokenValue == "if") {
-                    tokenType = Token::Type::If;
+                    tokenType = Token::Type::If; 
                 } else if (tokenValue == "else") {
                     tokenType = Token::Type::Else;
                 } else if (tokenValue == "return") {
                     tokenType = Token::Type::Return;
-                } */
-                if (tokenValue == "TRUE")
-                {
+                } */if (tokenValue == "TRUE") {
                     tokenType = Token::Type::BooleanTrue;
-                }
-                else if (tokenValue == "FALSE")
-                {
+                } else if (tokenValue == "FALSE") {
                     tokenType = Token::Type::BooleanFalse;
                 }
                 _currentState = START;
@@ -297,50 +259,38 @@ Token Tokenizer::getToken()
             // in case integer starts signed (pos/neg) and the current char is
             // not a digit
             if ((tokenValue.back() == '+' || tokenValue.back() == '-') &&
-                !isdigit(currentChar))
-            {
+                !isdigit(currentChar)) {
                 std::cerr << "Syntax error on line " << _lineNum
                           << ": invalid signed integer\n";
-                exit(1);
+                exit(23);
             }
 
             if (std::isdigit(
-                    currentChar))
-            { // Keep appending as long as its a number
+                    currentChar)) { // Keep appending as long as its a number
                 tokenValue += currentChar;
-            }
-            else if (!(isOperator(currentChar) || isspace(currentChar) ||
-                       currentChar == ';' || currentChar == ')' || currentChar == ']') ||
-                     isalpha(currentChar))
-            {
+            } else if (!(isOperator(currentChar) || isspace(currentChar) ||
+                         currentChar == ';' || currentChar == ')' || currentChar ==']') ||
+                       isalpha(currentChar)) {
                 std::cerr << "Syntax error on line " << _lineNum
                           << ": invalid Integer\n";
-                exit(1);
-            }
-            else
-            {
+                exit(24);
+            } else {
                 _currentState = START; // Ending number
                 tokenFound = true;
                 --_currentPos; // Re-evaluate this character in the next state
             }
             break;
         case DQ_STRING:
-            if (currentChar == '"')
-            {
+            if (currentChar == '"') {
                 // if the previous character was a backslash don't count this quote as a quote
-                if (_file[_currentPos - 1] == '\\')
-                {
+                if (_file[_currentPos - 1] == '\\') {
                     tokenValue += currentChar;
                 }
-                else
-                {
-                    if (tokenValue.length() == 1)
-                    {
+                else {
+                    if (tokenValue.length() == 1) {
 
                         tokenType = Token::Type::DoubleQuote;
-                    }
-                    else
-                    {
+                    } else {
 
                         tokenType = Token::Type::DoubleQuotedString;
                     }
@@ -348,34 +298,25 @@ Token Tokenizer::getToken()
                     tokenValue += currentChar;
                     _currentState = START;
                 }
-            }
-            else
-            {
-                if (currentChar == '\n')
-                {
+            } else {
+                if (currentChar == '\n') {
                     std::cerr << "Unterminated string quote on line: " << _lineNum << std::endl;
-                    exit(99);
+                    exit(25);
                 }
                 tokenValue += currentChar;
             }
             break;
-
+       
         case SQ_STRING:
-            if (currentChar == '\'')
-            {
-                if (_file[_currentPos - 1] == '\\')
-                {
+            if (currentChar == '\'') {
+                if (_file[_currentPos - 1] == '\\') {
                     tokenValue += currentChar;
                 }
-                else
-                {
-                    if (tokenValue.length() == 1)
-                    {
+                else {
+                    if (tokenValue.length() == 1) {
 
                         tokenType = Token::Type::SingleQuote;
-                    }
-                    else
-                    {
+                    } else {
 
                         tokenType = Token::Type::SingleQuotedString;
                     }
@@ -383,23 +324,20 @@ Token Tokenizer::getToken()
                     tokenValue += currentChar;
                     _currentState = START;
                 }
-            }
-            else
-            {
-                if (currentChar == '\n')
-                {
+            } else {
+                if (currentChar == '\n') {
                     std::cerr << "Unterminated string quote on line: " << _lineNum << std::endl;
-                    exit(99);
+                    exit(25);
                 }
                 tokenValue += currentChar;
             }
             break;
+
         }
         ++_currentPos;
     }
 
-    if (tokenFound || !tokenValue.empty())
-    {
+    if (tokenFound || !tokenValue.empty()) {
         _lineNum = tokenLineNum;
         return Token(tokenType, tokenValue, tokenLineNum);
     }

@@ -6,32 +6,42 @@
  *
  */
 
+#include "./AST/ASTParser.h"
 #include "./CST/Parser.h"
 #include "./CommentRemoval/fileAsArray.h"
-#include "./OutputCST/OutPutGenerator.h"
+#include "./OutputGenerator/OutPutGenerator.h"
 #include "./SymbolTable/SymbolTablesLinkedList.h"
 #include "./Token/Tokenizer.h"
+
+#include "./Node/Node.h"
+#include "./Token/Token.h"
+
 #include <fstream>
 #include <iostream>
 #include <string>
 
 using namespace std;
 
-int main(int argc, char *argv[]) {
-    if (argc < 3) {
+int main(int argc, char *argv[])
+{
+    if (argc < 3)
+    {
         cerr << "Usage: " << argv[0] << " <filename> <option>" << endl;
         return 1;
     }
 
     string filename = argv[1];
-    string option = argv[2]; 
+    string option = argv[2];
 
     fileAsArray fileArray(filename);
     fileArray.readFile();
 
-    try {
+    try
+    {
         fileArray.File_w_no_comments();
-    } catch (const std::exception& error) {
+    }
+    catch (const std::exception &error)
+    {
         cerr << "Exception caught: " << error.what() << endl;
         return 1;
     }
@@ -40,9 +50,11 @@ int main(int argc, char *argv[]) {
     tokenizer.tokenizeVector();
     vector<Token> tokens = tokenizer.getTokens();
 
-    if (option == "tokens") {
-        for (const auto& token : tokens) {
-            token.print(); 
+    if (option == "tokens")
+    {
+        for (const auto &token : tokens)
+        {
+            token.print();
         }
         return 0;
     }
@@ -50,17 +62,28 @@ int main(int argc, char *argv[]) {
     Parser parser(tokens);
     auto cstRoot = parser.parse();
 
-    if (option == "cst") {
+    if (option == "cst")
+    {
         OutPutGenerator CSToutput;
         CSToutput.PrintCST(cstRoot);
         return 0;
     }
 
-    if (option == "symbolTable") {
+    if (option == "symbolTable")
+    {
         SymbolTablesLinkedList tables(cstRoot);
         auto symTableRoot = tables.parse();
         OutPutGenerator STOutput;
         STOutput.PrintSymbolTables(symTableRoot);
+        return 0;
+    }
+
+    if (option == "ast")
+    {
+        ASTParser astParser(cstRoot);
+        auto astRoot = astParser.parse();
+        OutPutGenerator ASOutput;
+        ASOutput.PrintAST(astRoot);
         return 0;
     }
 

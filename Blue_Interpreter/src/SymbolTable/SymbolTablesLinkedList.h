@@ -1,47 +1,60 @@
 #ifndef SYMBOLTABLESLINKEDLIST_H
 #define SYMBOLTABLESLINKEDLIST_H
-#include "../CST/Node.h"
+
+#include "../Node/Node.h" 
 #include "../CST/Parser.h"
 #include "SymbolTable.h"
-#include <vector>
 #include <utility>
-using namespace std;
+#include <vector>
 
-class SymbolTablesLinkedList
-{
-public:
-  SymbolTablesLinkedList(const NodePtr CST_root);
+using std::make_shared;
+using std::pair;
+using std::shared_ptr;
+using std::vector;
 
-  SymTblPtr parse();
-  void parseRootNode();
+class SymbolTablesLinkedList {
+  public:
+    SymbolTablesLinkedList(const NodePtr CST_root);
 
-  NodePtr getNextCstNode();
-  NodePtr peekNextCstNode();
+    SymTblPtr parse();
+    void parseRootNode();
 
-  string nodeValue(NodePtr node);
+    NodePtr getNextCstNode();
+    NodePtr peekNextCstNode();
 
-  void addToSymTable(SymTblPtr s);
+    string nodeValue(const NodePtr &node) const;
 
-  // functions for creating tables. specific to the types of table
-  void declarationTable();
-  void functionTable();
-  void procedureTable();
+    void addToSymTable(const SymTblPtr &s);
 
-  // Creating symbol tables for parameter lists for Procedures and Functions
-  void parseParameters(const string &);
+    // functions for creating tables. specific to the types of table
+    void declarationTable();
+    void functionTable();
+    void procedureTable();
+    void parseParameters(const string &procOrFuncName);
 
-  void printTables();
+    // Helper methods for error handling and declaration checks
+    void reportError(const string &message, int lineNumber,
+                     int errorCode) const;
+    void checkFuncProcRedeclaration(const string &name, const string &type);
+  
+    bool checkVariableRedeclaration(const string &varName, int scope,
+                                    int lineNumber);
+    pair<bool, int> parseArrayDeclaration();
 
-private:
-  NodePtr curCstNode;
+    // Creating symbol tables for parameter lists for Procedures and Functions
 
-  size_t current = 0;
-  SymTblPtr root;
-  SymTblPtr lastTable;
-  int currentScope;
-  int scopeCount;
-  vector<std::pair<std::string, int>> varaibleDeclared; // Used to store all the defined variables
-  vector<string> funcProcNames;                         // Used to store function/procedure names to check availability
+    void printTables();
+
+  private:
+    NodePtr curCstNode;
+    SymTblPtr root, lastTable;
+    int currentScope, scopeCount;
+
+    // Store all the defined variables
+    vector<pair<string, int>> variableDeclared;
+
+    // Store function/procedure names to check availability
+    vector<string> funcProcNames;
 };
 
 #endif // SYMBOLTABLESLINKEDLIST_H

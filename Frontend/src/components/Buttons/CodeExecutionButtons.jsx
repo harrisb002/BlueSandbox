@@ -46,6 +46,16 @@ const CodeExecutionButtons = ({
             mb={4}
             ml={2}
             isLoading={isLoading}
+            onClick={() => onExecuteType("ast")}
+          >
+            AST
+          </Button>
+          <Button
+            variant="outline"
+            colorScheme="green"
+            mb={4}
+            ml={2}
+            isLoading={isLoading}
             onClick={() => onExecuteType("symbolTable")}
           >
             SymbolTable
