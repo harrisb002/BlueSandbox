@@ -50,8 +50,6 @@ Creates symbol tables for all the defined variables (including their type and sc
 ### ✅ Abstract Syntax Tree 
 Creates an Abstract Syntax Tree (AST) based on the Concrete Syntax Tree (CST). An Abstract Syntax Tree is not a clone of a Concrete Syntax Tree. Utilizes an LCRS binary tree (Left-Child, Right-Sibling) to store the AST. Allows for the isplay of the resulting AST in breadth-first order. 
 
-*Not yet implemented.*
-
 
 ## Contributors
 
