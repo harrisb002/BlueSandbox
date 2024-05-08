@@ -14,7 +14,7 @@ const CodeExecutionButtons = ({
         colorScheme="green"
         mb={4}
         isLoading={isLoading}
-        onClick={onRunCode}
+        onClick={language == "cpp" ? () => onExecuteType("run") : onRunCode}
       >
         Run Code
       </Button>

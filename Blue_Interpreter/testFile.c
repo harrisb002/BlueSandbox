@@ -1,25 +1,76 @@
 // ***************************************************
-// * CS460: Programming Assignment 4: Test Program 1 *
+// * CS460: Programming Assignment 5: Test Program 3 *
 // ***************************************************
 
-function int sum_of_first_n_squares (int n)
-{
-  int sum;
 
-  sum = 0;
-  if (n >= 1)
+
+// *******************************************************************************************
+// * The fizzbuzz procedure outputs one of the following responses:                          *
+// *                                                                                         *
+// * If counter is divisible by three without remainder, display "Fizz".                     *
+// * If counter is divisible by five without remainder, display "Buzz".                      *                
+// * If counter is divisible by both three and five without a remainder, display "Fizzbuzz". *
+// * If counter is NOT divisible by three or five, display the counter.                      *
+// *******************************************************************************************
+procedure fizzbuzz (int counter)
+{
+  int state;
+
+  state = 0;
+  if ((counter % 3) == 0)
   {
-    sum = n * (n + 1) * (2 * n + 1) / 6;
+    state = 1;
   }
-  return sum;
+  if ((counter % 5) == 0)
+  {
+    state = state * 2 + 2;
+  }
+  if (state == 1)
+  {
+    printf ("Fizz");
+  }
+  else
+  {
+    if (state == 2)
+    {
+      printf ("Buzz");
+    }
+    else
+    {
+      if (state == 4)
+      {
+        printf ("Fizzbuzz");
+      }
+      else
+      {
+        printf ("%d", counter);
+      }
+    }
+  }
 }
-  
+
+
+
+
+
 procedure main (void)
 {
-  int n;
-  int sum;
+  int counter;
 
-  n = 100;
-  sum = sum_of_first_n_squares (n);
-  printf ("sum of the squares of the first %d numbers = %d\n", n, sum);
+  counter = 1;
+  while (counter <= 100)
+  {
+    fizzbuzz (counter);
+    counter = counter + 1;
+    if (counter <= 100)
+    {
+      printf (", ");
+    }
+    else
+    {
+      printf ("\n");
+    }
+  }
 }
+
+

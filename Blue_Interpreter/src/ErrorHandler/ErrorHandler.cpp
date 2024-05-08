@@ -12,22 +12,22 @@ void ErrorHandler::handle(int errorCode, int lineNumber, const std::string& mess
     if (errorHandlers.find(errorCode) != errorHandlers.end()) {
         errorHandlers[errorCode](lineNumber, message1, message2);
     } else {
-        std::cout << "Unhandled error code: " << errorCode << " at line " << lineNumber;
+        std::cerr << "Unhandled error code: " << errorCode << " at line " << lineNumber;
         if (!message1.empty() || !message2.empty()) {
-            std::cout << " (" << message1 << " " << message2 << ")";
+            std::cerr << " (" << message1 << " " << message2 << ")";
         }
-        std::cout << std::endl;
+        std::cerr << std::endl;
     }
 }
 
 // Helper function to log errors
 void ErrorHandler::logError(int line, const std::string &errorCodeDescription,
                 const std::string &msg1, const std::string &msg2) {
-    std::cout << errorCodeDescription << " on line " << line;
+    std::cerr << errorCodeDescription << " on line " << line;
     if (!msg1.empty() || !msg2.empty()) {
-        std::cout << " (" << msg1 << " " << msg2 << ")";
+        std::cerr << " (" << msg1 << " " << msg2 << ")";
     }
-    std::cout << std::endl;
+    std::cerr << std::endl;
 }
     
 void ErrorHandler::initializeErrorHandlers() {
@@ -154,5 +154,33 @@ void ErrorHandler::initializeErrorHandlers() {
     errorHandlers[31] = [this](int line, const std::string& msg1, const std::string& msg2) {
         logError(line, "Error 31: Global declaration of globally defined variable, function or procedure", msg1, msg2);
         exit(31);
+    };
+    errorHandlers[32] = [this](int line, const std::string& msg1, const std::string& msg2) {
+        logError(line, "Error 32: Expected semicolon or comma", msg1, msg2);
+        exit(32);
+    };
+    errorHandlers[33] = [this](int line, const std::string& msg1, const std::string& msg2) {
+        logError(line, "Error 33: Can only do assignments in assignment statements", msg1, msg2);
+        exit(33);
+    };
+    errorHandlers[34] = [this](int line, const std::string& msg1, const std::string& msg2) {
+        logError(line, "Error 34: Expected identifier for start of assignment", msg1, msg2);
+        exit(34);
+    };
+    errorHandlers[35] = [this](int line, const std::string& msg1, const std::string& msg2) {
+        logError(line, "Error 35: Expected string literal for assignment", msg1, msg2);
+        exit(35);
+    };
+    errorHandlers[36] = [this](int line, const std::string& msg1, const std::string& msg2) {
+        logError(line, "Error 36: Expected string literal of size 1", msg1, msg2);
+        exit(36);
+    };
+    errorHandlers[37] = [this](int line, const std::string& msg1, const std::string& msg2) {
+        logError(line, "Error 37: Couldn't find parameter for function or procedure call", msg1, msg2);
+        exit(37);
+    };
+    errorHandlers[38] = [this](int line, const std::string& msg1, const std::string& msg2) {
+        logError(line, "Error 38: Expected array access", msg1, msg2);
+        exit(38);
     };
 }

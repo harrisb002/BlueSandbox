@@ -33,8 +33,8 @@ NodePtr SymbolTablesLinkedList::peekNextCstNode() {
 
 string SymbolTablesLinkedList::nodeValue(const NodePtr &node) const {
     if (!node) {
-        cerr << "Can't get value of a nullptr in the symbol table" << endl;
-        exit(28);
+        string message = "Can't get value of a nullptr in the symbol table";
+        _globalErrorHandler.handle(28, 0, message);
     }
 
     return node->Value().value();

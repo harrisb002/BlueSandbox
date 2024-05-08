@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <memory> // Used for shared_ptr
+#include <vector>
 
 using std::make_shared;
 using std::shared_ptr;
@@ -29,14 +30,34 @@ class SymbolTable {
           _procOrFuncName(procOrFuncName) {}
 
     void SetNextTable(const SymTblPtr &next);
+    void setDeclared(const bool dec) {_isDeclared = dec;}
+    void setValueSize(const int size) {
+
+        _value.resize(size);}
+    void setValue(int newVal , int index = 0) {
+        if (_dataType == "bool") {
+            if (newVal != 0) {
+                _value.at(index) = 1;
+            }
+            else {
+                _value.at(index) = 0;
+            }
+        }
+            _value.at(index) = newVal;
+    }
 
     string GetName() const { return _idName; }
     string GetDataType() const { return _dataType; }
     string GetIsArray() const { return _isArray ? "yes" : "no"; }
+    bool isArray() const { return _isArray;}
+    vector<int> &GetValue() {return _value;}
     int GetArraySize() const { return _arraySize; }
     int GetScope() const { return _scope; }
     SymTblPtr GetNextTable() const { return nextTable; }
+    bool GetIsDeclared() const {return _isDeclared; }
     std::string procOrFuncName() { return _procOrFuncName; }
+
+
 
     string GetStringIdType() const {
         switch (_idtype) {
@@ -70,8 +91,12 @@ class SymbolTable {
   private:
     string _idName, _dataType, _procOrFuncName;
     IDType _idtype;
+    bool _isDeclared = false;
     bool _isArray;
     int _arraySize, _scope;
+
+    vector<int> _value;
+
     SymTblPtr nextTable = nullptr;
 };
 

@@ -78,7 +78,7 @@ void Parser::parseDeclaration() {
         // semicolon check and add
         currToken = getToken();
         if (!match(Token::Type::Semicolon, currToken)) { // ERROR reserved name
-            _globalErrorHandler.handle(3, currToken.lineNum());
+            _globalErrorHandler.handle(32, currToken.lineNum());
         }
         addToCST(createNodePtr(currToken), RightSibling); // add name id to CST
     }
@@ -388,7 +388,14 @@ void Parser::parseFunctionArguments() {
                     expectToken(Token::Type::RBracket, "Expected ']'");
                 addToCST(rBracketNode, RightSibling);
             }
-        } else {
+        }
+        else if (argToken.type() == Token::Type::Integer ||
+                 argToken.type() == Token::Type::SingleQuotedString ||
+                 argToken.type() == Token::Type::DoubleQuotedString) {
+            // Add the literal
+            addToCST(createNodePtr(getToken()), RightSibling);
+        }
+        else {
             _globalErrorHandler.handle(7, argToken.lineNum());
         }
 
@@ -646,14 +653,8 @@ void Parser::parseAssignmentStatement() {
         token.type() == Token::Type::DoubleQuotedString) {
         token = getToken();
         addToCST(createNodePtr(token), RightSibling);
-    } else if (token.type() == Token::Type::Integer ||
-               token.type() == Token::Type::WholeNumber ||
-               token.type() == Token::Type::HexDigit ||
-               token.type() == Token::Type::Digit) {
-        token = getToken();
-        addToCST(createNodePtr(token), RightSibling);
-
-    } else {
+    }
+    else {
         parseExpression();
     }
 

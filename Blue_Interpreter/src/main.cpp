@@ -6,6 +6,7 @@
  *
  */
 
+#include "./Interpreter/Interpreter.h"
 #include "./AST/ASTParser.h"
 #include "./CST/Parser.h"
 #include "./CommentRemoval/fileAsArray.h"
@@ -69,10 +70,15 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    SymbolTablesLinkedList tables(cstRoot);
+    auto symTableRoot = tables.parse();
+
+    ASTParser astParser(cstRoot);
+    auto astRoot = astParser.parse();
+
     if (option == "symbolTable")
     {
-        SymbolTablesLinkedList tables(cstRoot);
-        auto symTableRoot = tables.parse();
+
         OutPutGenerator STOutput;
         STOutput.PrintSymbolTables(symTableRoot);
         return 0;
@@ -80,11 +86,16 @@ int main(int argc, char *argv[])
 
     if (option == "ast")
     {
-        ASTParser astParser(cstRoot);
-        auto astRoot = astParser.parse();
+        cout << "Within the run function" << endl;
+
         OutPutGenerator ASOutput;
         ASOutput.PrintAST(astRoot);
         return 0;
+    }
+
+    if (option == "run")
+    {
+        Interpreter interpret(astRoot, symTableRoot);
     }
 
     return 0;
